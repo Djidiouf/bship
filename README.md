@@ -1,7 +1,7 @@
 # bship
 bship is an advanced battleship game with fancy graphics and features
 
-##screenshot
+##screenshot with enhanced graphics
 ```
                ===[[[ BSHIP ]]]===
 ----------------Une idee braisnchat----------------
@@ -13,7 +13,7 @@ BIG AI: Where is my bship? You have only 4 turns.
 ~~~~~~~~~~~~~~~~\_________________/~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+  1  2  3  4  5
+\+  1  2  3  4  5
 1  .  .  .  .  .
 2  .  x  .  .  .
 3  .  .  .  x  ù
