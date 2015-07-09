@@ -37,63 +37,68 @@ def int_to_char(input):
     output = output.upper()
     return output
 
-### TURN -----------------------------------
-#we define the number of turns of the game
-turns_number = 10
+### GAMEPLAY VARIABLES --------------------
+turns_number = 10 #we define the number of turns of the game
+grid_size = 6    #we define the size of the board (MAX 11)
 
+### GRID INITIALIZATION -------------------
+def grid_init(grid,grid_size):
+    for x in range(grid_size):
+        grid.append(["."] * grid_size)
+    #we put column and row headers
+    col_header = {0:'+',1:'A',2:'B',3:'C',4:'D',5:'E',6:'F',7:'G',8:'H',9:'I',10:'J'}
+    row_header = {0:'+',1:' 1',2:' 2',3:' 3',4:' 4',5:' 5',6:' 6',7:' 7',8:' 8',9:' 9',10:'10'}
+
+    for i in range(grid_size):
+        grid[0][0] = " +"
+        grid[0][i] = col_header[i] #col
+        grid[i][0] = row_header[i] #row
 
 
 ### GAME HEADER ---------------------------
 def print_header():
     print("               ===[[[ BSHIP ]]]===               ")
     print("----------------Une idee braisnchat----------------")
-    print("BIG AI: Where is my bship? You have only %d turns." % turns_number)
-    print("LEGEND: x=miss , X=double-miss , o=ship, ø=ship-hit")
+    print("ENEMY : Where is my bship? You have only: %d turns." % turns_number)
+    print("LEGEND: x=miss , X=double-miss , O=ship, Q=ship-hit")
+    print("Tracking=Player's Ship         Primary=Enemy's Ship")
     print("---------------------------------------------------")
     #cheat
-    #print("#DEBUG: Col: %s | Row: %i" % (int_to_char(ship_col), ship_row))
+    #print("#DEBUG: Col: %s | Row: %i" % (int_to_char(ennemy_ship_col), ennemy_ship_row))
     print("                            __ ___ _ __ _ _ _      ")
     print("                           / - /_ ___ __ - -       ")
     print("                __________||_||____                ")
     print("~~~~~~~~~~~~~~~~\_________________/~~~~~~~~~~~~~~~~")
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print("")
 
-
-### BOARD ---------------------------------
-#we initialize the board and fill it with water O
+### GRIDS -------------------------
+#we initialize our two grids and fill them with water and nice headers.
+# TRACKING GRID
 tracking_grid = []
+grid_init(tracking_grid,grid_size)
 
-#we define the size of the board
-board_size = 6
-for x in range(board_size):
-    tracking_grid.append(["."] * board_size)
+# PRIMARY GRID
+primary_grid = []
+grid_init(primary_grid,grid_size)
 
-#we put column and row headers
-alpha = {0:'+',1:'A',2:'B',3:'C',4:'D',5:'E',6:'F',7:'G',8:'H',9:'I'}
-for i in range(board_size):
-    tracking_grid[0][0] = "+"
-    tracking_grid[0][i] = alpha[i] #col
-    tracking_grid[i][0] = str(i) #row
 
-#we enhance the graphics by getting rig of that list-style
-def print_board(board):
-    for row in board:
+#we enhance the graphics of board in input and get rig of that list-style
+def print_grid(grid):
+    for row in grid:
         print ("  ".join(row))
-
 
 
 ### AI BSHIPS ------------------------------
 #here we set the coordinates of the AI bship
-def random_col(board):
-    return randint(1, len(board[0]) - 1)
-def random_row(board):
-    return randint(1, len(board) - 1)
+def random_col(grid):
+    return randint(1, len(grid[0]) - 1)
+def random_row(grid):
+    return randint(1, len(grid) - 1)
 
-ship_col = random_col(tracking_grid)
-ship_row = random_row(tracking_grid)
+ennemy_ship_col = random_col(primary_grid)
+ennemy_ship_row = random_row(primary_grid)
 
-
+#are we running out of guess allowed?
 def another_turn(turn):
     if turn == turns_number-1:
         #failed because run out of turn
@@ -104,18 +109,54 @@ def another_turn(turn):
         return True
 
 #we display the guess made by the player
-def print_player_guess():
+def print_guess():
     print("")
-    print("PLAYER: %s:%d" % (int_to_char(guess_col), guess_row))
+    print("PLAYER: %s:%d" % (int_to_char(player_guess_col), player_guess_row))
+    print("ENEMY : %s:%d" % (int_to_char(enemy_guess_col), enemy_guess_row))
 
 
-### MAIN -----------------------------------
+### MAIN #############################################################################
 #It's now the main thing, greetings to everybody!
 clear()
 print_header()
-print_board(tracking_grid)
 
+### PLAYER SHIP -------------------------------
+print("--Tracking Grid--")
+print_grid(tracking_grid)
+print("")
 
+###we ask for player ship position
+print("Where are your ship?")
+#PLAYER SHIP COL
+while True:
+    player_ship_col = input("Player Ship Col:")   #format AaZz
+    if player_ship_col.isalpha() and char_to_int(player_ship_col) < grid_size:
+        break
+    else:
+        print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+player_ship_col = char_to_int(player_ship_col)
+
+#PLAYER SHIP ROW
+while True:
+    player_ship_row = int(input("Player Ship Row:"))  #format 0-9
+    if type(player_ship_row) == int and player_ship_row < grid_size:
+        break
+    else:
+        print("--- Please, type a number inferior to %d" % grid_size)
+tracking_grid[player_ship_row][player_ship_col] = "O"
+
+#we display the two grids updated
+def print_grids_resolution():
+    clear()
+    print_header()
+    print("--Tracking Grid--")
+    print_grid(tracking_grid)
+    print("")
+    print("==Primary  Grid==")
+    print_grid(primary_grid)
+
+### ROUND 1 -------------------------------
+print_grids_resolution()
 
 
 # 3
@@ -125,61 +166,78 @@ for turn in range(turns_number):
     print("BIG AI: Turn", turn +1, "on", turns_number)
     print("")
 
+    ###PLAYER GUESS ---------------------------------
     ###we ask for position to guess to the player
+    print("Where do you launch at your missile?")
     #COL GUESS
     while True:
-        guess_col = input("Guess Col:")   #format AaZz
-        if guess_col.isalpha():
+        player_guess_col = input("Guess Col:")   #format AaZz
+        if player_guess_col.isalpha()and char_to_int(player_guess_col) < grid_size:
             break
         else:
-            print("--- Plese, type a letter")
-    guess_col = char_to_int(guess_col)
+            print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+    player_guess_col = char_to_int(player_guess_col)
 
     #ROW GUESS
     while True:
-        try:
-            guess_row = int(input("Guess Row:"))  #format 0-9
-            if type(guess_row) == int:
-                break
-        except ValueError:
-            print("--- Please, type a number")
-            continue
+        player_guess_row = int(input("Guess Row:"))  #format 0-9
+        if type(player_guess_row) == int and player_guess_row < grid_size:
+            break
+        else:
+            print("--- Please, type a number inferior to %d" % grid_size)
 
-    if guess_row == ship_row and guess_col == ship_col:
+    ###ENEMY GUESS ---------------------------------
+    enemy_guess_col = random_col(tracking_grid)
+    enemy_guess_row = random_row(tracking_grid)
+
+    ###TURN RESOLUTION ######################################
+    ##PLAYER TURN RESOLUTION ------------
+    if player_guess_row == ennemy_ship_row and player_guess_col == ennemy_ship_col:
         #success
-        tracking_grid[ship_row][ship_col] = "ø"
-        clear()
-        print_header()
-        print_board(tracking_grid)
-        print_player_guess()
-        print("BIG AI: NOOOO! You sunk my battleship! (on turn %s)" % (turn+1))
+        primary_grid[ennemy_ship_row][ennemy_ship_col] = "Q"
+        print_grids_resolution()
+        print_guess()
+        print("ENEMY : NOOOO! You sunk my battleship! (on turn %s)" % (turn+1))
         break
     else:
-        if guess_row <= 0 or guess_row >= board_size or guess_col <= 0 or guess_col >= board_size:
-            #out of perimeter
-            clear()
-            print_header()
-            print_board(tracking_grid)
-            print_player_guess()
-            print("BIG AI: Oops, that's not even in the ocean.")
-        elif tracking_grid[guess_row][guess_col] == "x" or tracking_grid[guess_row][guess_col] == "X":
+        if primary_grid[player_guess_row][player_guess_col] == "x" or primary_grid[player_guess_row][player_guess_col] == "X":
             #already guess
-            tracking_grid[guess_row][guess_col] = "X"
-            clear()
-            print_header()
-            print_board(tracking_grid)
-            print_player_guess()
-            print("BIG AI: You guessed that one already.")
+            primary_grid[player_guess_row][player_guess_col] = "X"
+            print_grids_resolution()
+            print_guess()
+            print("ENEMY : You guessed that one already.")
         else:
             #this guess miss
-            tracking_grid[guess_row][guess_col] = "x"
-            clear()
-            print_header()
-            print_board(tracking_grid)
-            print_player_guess()
-            print("BIG AI: You missed my battleship!")
+            primary_grid[player_guess_row][player_guess_col] = "x"
+            print_grids_resolution()
+            print_guess()
+            print("ENEMY : You missed my battleship!")
+
+    ##ENEMY TURN RESOLUTION ------------
+    if enemy_guess_row == player_ship_row and enemy_guess_col == player_ship_col:
+        #success
+        tracking_grid[player_ship_row][player_ship_col] = "Q"
+        print_grids_resolution()
+        print_guess()
+        print("ENEMY : HAHAHA! I sunk your battleship! (on turn %s)" % (turn+1))
+        break
+    else:
+        if tracking_grid[enemy_guess_row][enemy_guess_col] == "x" or tracking_grid[enemy_guess_row][enemy_guess_col] == "X":
+            #already guess
+            tracking_grid[enemy_guess_row][enemy_guess_col] = "X"
+            print_grids_resolution()
+            print_guess()
+            print("ENEMY : I guessed that one already.")
+        else:
+            #this guess miss
+            tracking_grid[enemy_guess_row][enemy_guess_col] = "x"
+            print_grids_resolution()
+            print_guess()
+            print("ENEMY : I missed your battleship!")
+
+
 
     if another_turn(turn) == False:
         break
 
-    print("-------------------------")
+    print("---------------------------------------------------")
