@@ -175,7 +175,7 @@ def print_notifications(number):
     notifications = {
         'total_win' : notif_total_win,
         'partial_win' : notif_partial_win,
-        'already miss' : notif_miss_twice,
+        'already_miss' : notif_miss_twice,
         'miss' : notif_miss,
     }
     result = notifications.get(number, 'Error')
