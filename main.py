@@ -117,8 +117,6 @@ def random_row(grid):
     return randint(1, len(grid) - 1)
 
 
-
-
 for i in range(ships_number):
     # we also want to avoid duplicates
     while True:
@@ -134,7 +132,6 @@ for i in range(ships_number):
 
             break
 
-
 # are we running out of guess allowed?
 def another_turn(turn):
     if turn == turns_number - 1:
@@ -144,8 +141,6 @@ def another_turn(turn):
         return False
     else:
         return True
-
-
 
 
 # Display the two grids updated
@@ -164,6 +159,7 @@ def print_guess():
     print("PLAYER: %s:%d" % (int_to_char(player_guess_col), player_guess_row))
     print("ENEMY : %s:%d" % (int_to_char(enemy_guess_col), enemy_guess_row))
 
+
 # Display notifications
 def notif_total_win():
     print("ENEMY : NOOOO! You sunk all my battleships! (on turn %s)" % (turn + 1))
@@ -180,7 +176,7 @@ def notif_enemy_miss_twice():
 def notif_enemy_miss():
     print("ENEMY : I missed your battleship!")
 
-def print_notifications(number):
+def print_notifications(msg):
     notifications = {
         'total_win' : notif_total_win,
         'partial_win' : notif_partial_win,
@@ -190,9 +186,8 @@ def print_notifications(number):
         'enemy_miss_twice' : notif_enemy_miss_twice,
         'enemy_miss' : notif_enemy_miss,
     }
-    result = notifications.get(number, 'Error')
+    result = notifications.get(msg, lambda : 'Error')
     return result()
-
 
 
 ### MAIN #############################################################################
@@ -227,8 +222,6 @@ for i in range(ships_number):
                 break
             else:
                 print("--- Please, type a number inferior to %d" % grid_size)
-
-        random_col_row = (player_ship_col, player_ship_row)
 
         if (player_ship_col, player_ship_row) not in player_ships:
             player_ships.append((player_ship_col, player_ship_row))
