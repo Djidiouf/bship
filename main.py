@@ -43,9 +43,11 @@ def int_to_char(input):
 
 ### GAMEPLAY VARIABLES --------------------
 turns_number = 10  # we define the number of turns of the game
-grid_size = 6  # we define the size of the board (MAX 11)
-ships_number = 1  # number of ships on each side
+grid_size = 6      # we define the size of the board (MAX 11)
+ships_number = 2   # number of ships on each side
 
+enemy_ships = []   # Coordinates of Enemy's ships
+player_ships = []  # Coordinates of Player's ships
 
 ### GRID INITIALIZATION -------------------
 def grid_init(grid, grid_size):
@@ -71,7 +73,8 @@ def print_header():
     print("---------------------------------------------------")
     # cheat
     print(">>> DEBUG >>>")
-    print("Bships of the enemy: ", enemy_ships)
+    print("Bships of the enemy : ", enemy_ships)
+    print("Bships of the player: ", player_ships)
     print("--Enemy Grid--")
     print_grid(enemy_grid)
     print("<<< DEBUG <<<")
@@ -114,7 +117,7 @@ def random_row(grid):
     return randint(1, len(grid) - 1)
 
 
-enemy_ships = []
+
 
 for i in range(ships_number):
     # we also want to avoid duplicates
@@ -204,24 +207,36 @@ print("")
 
 ###we ask for player ship position
 print("Where are your ship?")
-# PLAYER SHIP COL
-while True:
-    player_ship_col = input("Player Ship Col:")  # format AaZz
-    if player_ship_col.isalpha() and char_to_int(player_ship_col) < grid_size:
-        break
-    else:
-        print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
-player_ship_col = char_to_int(player_ship_col)
 
-# PLAYER SHIP ROW
-while True:
-    player_ship_row = int(input("Player Ship Row:"))  # format 0-9
-    if type(player_ship_row) == int and player_ship_row < grid_size:
-        break
-    else:
-        print("--- Please, type a number inferior to %d" % grid_size)
-tracking_grid[player_ship_row][player_ship_col] = "O"
+for i in range(ships_number):
+    # we also want to avoid duplicates
+    while True:
+        # PLAYER SHIP COL
+        while True:
+            player_ship_col = input("Player Ship Col:")  # format AaZz
+            if player_ship_col.isalpha() and char_to_int(player_ship_col) < grid_size:
+                break
+            else:
+                print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+        player_ship_col = char_to_int(player_ship_col)
 
+        # PLAYER SHIP ROW
+        while True:
+            player_ship_row = int(input("Player Ship Row:"))  # format 0-9
+            if type(player_ship_row) == int and player_ship_row < grid_size:
+                break
+            else:
+                print("--- Please, type a number inferior to %d" % grid_size)
+
+        random_col_row = (player_ship_col, player_ship_row)
+
+        if (player_ship_col, player_ship_row) not in player_ships:
+            player_ships.append((player_ship_col, player_ship_row))
+
+            # we assign the player's bship on the player_grid
+            tracking_grid[player_ship_row][player_ship_col] = 'O'
+
+            break
 
 ### MAIN LOOP -------------------------------
 print_grids_presentation()
