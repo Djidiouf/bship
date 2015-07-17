@@ -35,7 +35,7 @@ def char_to_int(x):
 
 # function to transform an int to a char
 def int_to_char(x):
-    x + 96
+    x = x + 96
     output = chr(x)
     output = output.upper()
     return output
@@ -73,16 +73,16 @@ def print_header():
     print("Tracking=Player's Ship         Primary=Enemy's Ship")
     print("---------------------------------------------------")
     # cheat
-    print(">>> DEBUG >>>")
-    print("Bships of the enemy : ", enemy_ships)
-    print("Bships of the player: ", player_ships)
-    print("--Enemy Grid--")
-    print_grid(enemy_grid)
-    print("<<< DEBUG <<<")
-    # print("                            __ ___ _ __ _ _ _      ")
-    # print("                           / - /_ ___ __ - -       ")
-    # print("                __________||_||____                ")
-    # print("~~~~~~~~~~~~~~~~\_________________/~~~~~~~~~~~~~~~~")
+    #print(">>> DEBUG >>>")
+    #print("Bships of the enemy : ", enemy_ships)
+    #print("Bships of the player: ", player_ships)
+    #print("--Enemy Grid--")
+    #print_grid(enemy_grid)
+    #print("<<< DEBUG <<<")
+    print("                            __ ___ _ __ _ _ _      ")
+    print("                           / - /_ ___ __ - -       ")
+    print("                __________||_||____                ")
+    print("~~~~~~~~~~~~~~~~\_________________/~~~~~~~~~~~~~~~~")
     print("")
 
 
@@ -222,7 +222,7 @@ print_grid(tracking_grid)
 print("")
 
 ###we ask for player ship position
-print("Where are your ship?")
+print("Where are your %i ship(s)?" % (ships_number))
 
 for i in range(ships_number):
     # we also want to avoid duplicates
