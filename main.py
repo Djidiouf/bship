@@ -24,30 +24,31 @@ def clear():
 
 
 # function to transform a char to an int
-def char_to_int(input):
-    if len(input) > 1:
+def char_to_int(x):
+    if len(x) > 1:
         return 0
     else:
-        input = input.lower()
-        output = ord(input) - 96
+        x = x.lower()
+        output = ord(x) - 96
         return output
 
 
 # function to transform an int to a char
-def int_to_char(input):
-    input = input + 96
-    output = chr(input)
+def int_to_char(x):
+    x + 96
+    output = chr(x)
     output = output.upper()
     return output
 
 
 ### GAMEPLAY VARIABLES --------------------
 turns_number = 10  # we define the number of turns of the game
-grid_size = 6      # we define the size of the board (MAX 11)
-ships_number = 2   # number of ships on each side
+grid_size = 6  # we define the size of the board (MAX 11)
+ships_number = 3  # number of ships on each side
 
-enemy_ships = []   # Coordinates of Enemy's ships
+enemy_ships = []  # Coordinates of Enemy's ships
 player_ships = []  # Coordinates of Player's ships
+
 
 ### GRID INITIALIZATION -------------------
 def grid_init(grid, grid_size):
@@ -132,6 +133,7 @@ for i in range(ships_number):
 
             break
 
+
 # are we running out of guess allowed?
 def another_turn(turn):
     if turn == turns_number - 1:
@@ -153,6 +155,7 @@ def print_grids_presentation():
     print("==Primary  Grid==")
     print_grid(primary_grid)
 
+
 # Display the guess made by the player and the enemy
 def print_guess():
     print("")
@@ -163,33 +166,48 @@ def print_guess():
 # Display notifications
 def notif_total_win():
     print("ENEMY : NOOOO! You sunk all my battleships! (on turn %s)" % (turn + 1))
+
+
 def notif_partial_win():
     print("ENEMY : NO! You sunk one of my battleships! (on turn %s)" % (turn + 1))
+
+
 def notif_player_miss_twice():
     print("ENEMY : You guessed that one already.")
+
+
 def notif_player_miss():
     print("ENEMY : You missed my battleship!")
+
+
 def notif_total_lose():
     print("ENEMY : HAHAHA! I sunk all your battleships! (on turn %s)" % (turn + 1))
+
+
 def notif_partial_lose():
     print("ENEMY : YEAH! I sunk one of your battleships! (on turn %s)" % (turn + 1))
+
+
 def notif_enemy_miss_twice():
     print("ENEMY : I guessed that one already.")
+
+
 def notif_enemy_miss():
     print("ENEMY : I missed your battleship!")
 
+
 def print_notifications(msg):
     notifications = {
-        'total_win' : notif_total_win,
-        'partial_win' : notif_partial_win,
-        'player_miss_twice' : notif_player_miss_twice,
-        'player_miss' : notif_player_miss,
-        'total_lose' : notif_total_lose,
-        'partial_lose' : notif_partial_lose,
-        'enemy_miss_twice' : notif_enemy_miss_twice,
-        'enemy_miss' : notif_enemy_miss,
+        'total_win': notif_total_win,
+        'partial_win': notif_partial_win,
+        'player_miss_twice': notif_player_miss_twice,
+        'player_miss': notif_player_miss,
+        'total_lose': notif_total_lose,
+        'partial_lose': notif_partial_lose,
+        'enemy_miss_twice': notif_enemy_miss_twice,
+        'enemy_miss': notif_enemy_miss,
     }
-    result = notifications.get(msg, lambda : 'Error')
+    result = notifications.get(msg, lambda: 'Error')
     return result()
 
 
@@ -219,6 +237,7 @@ for i in range(ships_number):
                     print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
             except ValueError:
                 print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+                continue
         player_ship_col = char_to_int(player_ship_col)
 
         # PLAYER SHIP ROW
@@ -238,7 +257,6 @@ for i in range(ships_number):
 
             # we assign the player's bship on the player_grid
             tracking_grid[player_ship_row][player_ship_col] = 'O'
-
             break
 
 ### MAIN LOOP -------------------------------
@@ -263,6 +281,7 @@ for turn in range(turns_number):
                 print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
         except ValueError:
             print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+            continue
     player_guess_col = char_to_int(player_guess_col)
 
     # ROW GUESS
@@ -306,7 +325,8 @@ for turn in range(turns_number):
             print_notifications('total_win')
             break
     else:
-        if primary_grid[player_guess_row][player_guess_col] == "x" or primary_grid[player_guess_row][player_guess_col] == "X":
+        if primary_grid[player_guess_row][player_guess_col] == "x" or primary_grid[player_guess_row][
+            player_guess_col] == "X":
             # already guess
             primary_grid[player_guess_row][player_guess_col] = "X"
             notif_msg_player_turn = 'player_miss_twice'
@@ -331,7 +351,8 @@ for turn in range(turns_number):
             print_notifications('total_lose')
             break
     else:
-        if tracking_grid[enemy_guess_row][enemy_guess_col] == "x" or tracking_grid[enemy_guess_row][enemy_guess_col] == "X":
+        if tracking_grid[enemy_guess_row][enemy_guess_col] == "x" or tracking_grid[enemy_guess_row][
+            enemy_guess_col] == "X":
             # already guess
             tracking_grid[enemy_guess_row][enemy_guess_col] = "X"
             notif_msg_enemy_turn = 'enemy_miss_twice'
