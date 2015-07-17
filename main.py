@@ -211,10 +211,13 @@ for i in range(ships_number):
     while True:
         # PLAYER SHIP COL
         while True:
-            player_ship_col = input("Player Ship Col:")  # format AaZz
-            if player_ship_col.isalpha() and char_to_int(player_ship_col) < grid_size:
-                break
-            else:
+            try:
+                player_ship_col = input("Player Ship Col:")  # format AaZz
+                if len(player_ship_col) == 1 and player_ship_col.isalpha() and char_to_int(player_ship_col) < grid_size:
+                    break
+                else:
+                    print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+            except ValueError:
                 print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
         player_ship_col = char_to_int(player_ship_col)
 
@@ -249,12 +252,16 @@ for turn in range(turns_number):
     ###PLAYER GUESS ---------------------------------
     ###we ask for position to guess to the player
     print("Where do you launch at your missile?")
+
     # COL GUESS
     while True:
-        player_guess_col = input("Guess Col:")  # format AaZz
-        if player_guess_col.isalpha() and char_to_int(player_guess_col) < grid_size:
-            break
-        else:
+        try:
+            player_guess_col = input("Guess Col:")  # format AaZz
+            if len(player_guess_col) == 1 and player_guess_col.isalpha() and char_to_int(player_guess_col) < grid_size:
+                break
+            else:
+                print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
+        except ValueError:
             print("--- Please, type a letter inferior to %s" % int_to_char(grid_size))
     player_guess_col = char_to_int(player_guess_col)
 
