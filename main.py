@@ -321,7 +321,7 @@ for turn in range(turns_number):
     ##ENEMY TURN RESOLUTION ------------
     if enemy_guess in player_ships:
         # enemy success
-        tracking_grid[player_ship_row][player_ship_col] = "Q"
+        tracking_grid[enemy_guess_row][enemy_guess_col] = "Q"
         # we retrieve the index of the tuple guessed and delete it
         player_ships.pop(player_ships.index(enemy_guess))
         notif_msg_enemy_turn = 'partial_lose'
