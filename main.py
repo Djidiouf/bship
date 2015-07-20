@@ -44,10 +44,12 @@ def int_to_char(x):
 ### GAMEPLAY VARIABLES --------------------
 turns_number = 10  # we define the number of turns of the game
 grid_size = 6  # we define the size of the board (MAX 11)
-ships_number = 3  # number of ships on each side
+ships_number = 2  # number of ships on each side
 
 enemy_ships = []  # Coordinates of Enemy's ships
 player_ships = []  # Coordinates of Player's ships
+
+enemy_guess_tried = [] # Coordinates tried by the Enemy
 
 
 ### GRID INITIALIZATION -------------------
@@ -291,9 +293,26 @@ for turn in range(turns_number):
     print("player guess =", player_guess)
 
     ###ENEMY GUESS ---------------------------------
-    enemy_guess_col = random_col(tracking_grid)
-    enemy_guess_row = random_row(tracking_grid)
-    enemy_guess = (enemy_guess_col, enemy_guess_row)
+    #enemy_guess_col = random_col(tracking_grid)
+    #enemy_guess_row = random_row(tracking_grid)
+
+    #enemy_guess = (enemy_guess_col, enemy_guess_row)
+
+    while True:
+        try:
+            enemy_guess_col = random_col(tracking_grid)
+            enemy_guess_row = random_row(tracking_grid)
+            if (enemy_guess_col, enemy_guess_row) not in enemy_guess_tried:
+                # we log those coordinates for future purpose
+                enemy_guess_tried.append((enemy_guess_col, enemy_guess_row))
+                # we assign those to the current guess
+                enemy_guess = (enemy_guess_col, enemy_guess_row)
+                break
+        except ValueError:
+            continue
+
+    print("ENEMY: --- I tried : ", enemy_guess_tried)
+
 
     ###TURN RESOLUTION ######################################
     ##PLAYER TURN RESOLUTION ------------
