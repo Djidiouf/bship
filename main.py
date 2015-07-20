@@ -73,16 +73,16 @@ def print_header():
     print("Tracking=Player's Ship         Primary=Enemy's Ship")
     print("---------------------------------------------------")
     # cheat
-    #print(">>> DEBUG >>>")
-    #print("Bships of the enemy : ", enemy_ships)
-    #print("Bships of the player: ", player_ships)
-    #print("--Enemy Grid--")
-    #print_grid(enemy_grid)
-    #print("<<< DEBUG <<<")
-    print("                            __ ___ _ __ _ _ _      ")
-    print("                           / - /_ ___ __ - -       ")
-    print("                __________||_||____                ")
-    print("~~~~~~~~~~~~~~~~\_________________/~~~~~~~~~~~~~~~~")
+    print(">>> DEBUG >>>")
+    print("Bships of the enemy : ", enemy_ships)
+    print("Bships of the player: ", player_ships)
+    print("--Enemy Grid--")
+    print_grid(enemy_grid)
+    print("<<< DEBUG <<<")
+    # print("                            __ ___ _ __ _ _ _      ")
+    # print("                           / - /_ ___ __ - -       ")
+    # print("                __________||_||____                ")
+    # print("~~~~~~~~~~~~~~~~\_________________/~~~~~~~~~~~~~~~~")
     print("")
 
 
@@ -172,10 +172,6 @@ def notif_partial_win():
     print("ENEMY : NO! You sunk one of my battleships! (on turn %s)" % (turn + 1))
 
 
-def notif_player_miss_twice():
-    print("ENEMY : You guessed that one already.")
-
-
 def notif_player_miss():
     print("ENEMY : You missed my battleship!")
 
@@ -188,10 +184,6 @@ def notif_partial_lose():
     print("ENEMY : YEAH! I sunk one of your battleships! (on turn %s)" % (turn + 1))
 
 
-def notif_enemy_miss_twice():
-    print("ENEMY : I guessed that one already.")
-
-
 def notif_enemy_miss():
     print("ENEMY : I missed your battleship!")
 
@@ -200,11 +192,9 @@ def print_notifications(msg):
     notifications = {
         'total_win': notif_total_win,
         'partial_win': notif_partial_win,
-        'player_miss_twice': notif_player_miss_twice,
         'player_miss': notif_player_miss,
         'total_lose': notif_total_lose,
         'partial_lose': notif_partial_lose,
-        'enemy_miss_twice': notif_enemy_miss_twice,
         'enemy_miss': notif_enemy_miss,
     }
     result = notifications.get(msg, lambda: 'Error')
@@ -303,7 +293,6 @@ for turn in range(turns_number):
     ###ENEMY GUESS ---------------------------------
     enemy_guess_col = random_col(tracking_grid)
     enemy_guess_row = random_row(tracking_grid)
-
     enemy_guess = (enemy_guess_col, enemy_guess_row)
 
     ###TURN RESOLUTION ######################################
@@ -312,7 +301,7 @@ for turn in range(turns_number):
     notif_msg_enemy_turn = 0
 
     if player_guess in enemy_ships:
-        # success
+        # player success
         primary_grid[player_guess_row][player_guess_col] = "Q"
         # we retrieve the index of the tuple guessed and delete it
         enemy_ships.pop(enemy_ships.index(player_guess))
@@ -325,25 +314,19 @@ for turn in range(turns_number):
             print_notifications('total_win')
             break
     else:
-        if primary_grid[player_guess_row][player_guess_col] == "x" or primary_grid[player_guess_row][
-            player_guess_col] == "X":
-            # already guess
-            primary_grid[player_guess_row][player_guess_col] = "X"
-            notif_msg_player_turn = 'player_miss_twice'
-        else:
-            # this guess miss
-            primary_grid[player_guess_row][player_guess_col] = "x"
-            notif_msg_player_turn = 'player_miss'
+        # this guess miss
+        primary_grid[player_guess_row][player_guess_col] = "x"
+        notif_msg_player_turn = 'player_miss'
 
     ##ENEMY TURN RESOLUTION ------------
     if enemy_guess in player_ships:
-        # success
+        # enemy success
         tracking_grid[player_ship_row][player_ship_col] = "Q"
         # we retrieve the index of the tuple guessed and delete it
         player_ships.pop(player_ships.index(enemy_guess))
         notif_msg_enemy_turn = 'partial_lose'
 
-        # if enemy_ships is empty , there is nothing more to do
+        # if player_ships is empty , there is nothing more to do
         if len(player_ships) == 0:
             print_grids_presentation()
             print_guess()
@@ -351,15 +334,9 @@ for turn in range(turns_number):
             print_notifications('total_lose')
             break
     else:
-        if tracking_grid[enemy_guess_row][enemy_guess_col] == "x" or tracking_grid[enemy_guess_row][
-            enemy_guess_col] == "X":
-            # already guess
-            tracking_grid[enemy_guess_row][enemy_guess_col] = "X"
-            notif_msg_enemy_turn = 'enemy_miss_twice'
-        else:
-            # this guess miss
-            tracking_grid[enemy_guess_row][enemy_guess_col] = "x"
-            notif_msg_enemy_turn = 'enemy_miss'
+        # this guess miss
+        tracking_grid[enemy_guess_row][enemy_guess_col] = "x"
+        notif_msg_enemy_turn = 'enemy_miss'
 
     print_grids_presentation()
     print_guess()
