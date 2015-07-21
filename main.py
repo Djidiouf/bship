@@ -51,6 +51,9 @@ player_ships = []  # Coordinates of Player's ships
 
 enemy_guess_tried = [] # Coordinates tried by the Enemy
 
+enemy_score = 0  # number of player's ships the enemy have managed to sink
+player_score = 0  # number of enemy's ships the player have managed to sink
+
 
 ### GRID INITIALIZATION -------------------
 def grid_init(grid, grid_size):
@@ -140,8 +143,8 @@ for i in range(ships_number):
 def another_turn(turn):
     if turn == turns_number - 1:
         # failed because run out of turn
-        print("BIG AI: You ran out of guess possibilities")
-        print("BIG AI: Game Over")
+        print("BIG AI: All turns have been played.")
+        print_score()
         return False
     else:
         return True
@@ -164,6 +167,8 @@ def print_guess():
     print("PLAYER: %s:%d" % (int_to_char(player_guess_col), player_guess_row))
     print("ENEMY : %s:%d" % (int_to_char(enemy_guess_col), enemy_guess_row))
 
+def print_score():
+    print("BIG AI: The score is Player=%d / Enemy=%d" % (player_score,enemy_score))
 
 # Display notifications
 def notif_total_win():
@@ -318,6 +323,7 @@ for turn in range(turns_number):
     if player_guess in enemy_ships:
         # player success
         primary_grid[player_guess_row][player_guess_col] = "Q"
+        player_score += 1
         # we retrieve the index of the tuple guessed and delete it
         enemy_ships.pop(enemy_ships.index(player_guess))
         notif_msg_player_turn = 'partial_win'
@@ -327,6 +333,7 @@ for turn in range(turns_number):
             print_grids_presentation()
             print_guess()
             print_notifications('total_win')
+            print_score()
             break
     else:
         # this guess miss
@@ -337,6 +344,7 @@ for turn in range(turns_number):
     if enemy_guess in player_ships:
         # enemy success
         tracking_grid[enemy_guess_row][enemy_guess_col] = "Q"
+        enemy_score += 1
         # we retrieve the index of the tuple guessed and delete it
         player_ships.pop(player_ships.index(enemy_guess))
         notif_msg_enemy_turn = 'partial_lose'
@@ -347,6 +355,7 @@ for turn in range(turns_number):
             print_guess()
             print_notifications(notif_msg_player_turn)
             print_notifications('total_lose')
+            print_score()
             break
     else:
         # this guess miss
