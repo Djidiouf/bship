@@ -241,7 +241,7 @@ for i in range(ships_number):
         while True:
             try:
                 player_ship_row = int(input("Player Ship Row:"))  # format 0-9
-                if player_ship_row < grid_size:
+                if 0 < player_ship_row < grid_size:
                     break
                 else:
                     print("--- Please, type a number inferior to %d" % grid_size)
@@ -285,7 +285,7 @@ for turn in range(turns_number):
     while True:
         try:
             player_guess_row = int(input("Guess Row:"))  # format 0-9
-            if player_guess_row < grid_size:
+            if 0 < player_guess_row < grid_size:
                 break
             else:
                 print("--- Please, type a number inferior to %d" % grid_size)
