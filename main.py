@@ -293,11 +293,7 @@ for turn in range(turns_number):
     print("player guess =", player_guess)
 
     ###ENEMY GUESS ---------------------------------
-    #enemy_guess_col = random_col(tracking_grid)
-    #enemy_guess_row = random_row(tracking_grid)
-
-    #enemy_guess = (enemy_guess_col, enemy_guess_row)
-
+    #the enemy need to guess coordinates that he never guessed before
     while True:
         try:
             enemy_guess_col = random_col(tracking_grid)
