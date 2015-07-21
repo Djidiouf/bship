@@ -35,13 +35,13 @@ def char_to_int(x):
 
 # function to transform an int to a char
 def int_to_char(x):
-    x = x + 96
+    x += 96
     output = chr(x)
     output = output.upper()
     return output
 
 
-### GAMEPLAY VARIABLES --------------------
+# -- GAMEPLAY VARIABLES --------------------
 turns_number = 10  # we define the number of turns of the game
 grid_size = 6  # we define the size of the board (MAX 11)
 ships_number = 2  # number of ships on each side
@@ -49,13 +49,13 @@ ships_number = 2  # number of ships on each side
 enemy_ships = []  # Coordinates of Enemy's ships
 player_ships = []  # Coordinates of Player's ships
 
-enemy_guess_tried = [] # Coordinates tried by the Enemy
+enemy_guess_tried = []  # Coordinates tried by the Enemy
 
 enemy_score = 0  # number of player's ships the enemy have managed to sink
 player_score = 0  # number of enemy's ships the player have managed to sink
 
 
-### GRID INITIALIZATION -------------------
+# -- GRID INITIALIZATION -------------------
 def grid_init(grid, grid_size):
     for x in range(grid_size):
         grid.append(["."] * grid_size)
@@ -69,7 +69,7 @@ def grid_init(grid, grid_size):
         grid[i][0] = row_header[i]  # row
 
 
-### GAME HEADER ---------------------------
+# -- GAME HEADER ---------------------------
 def print_header():
     print("               ===[[[ BSHIP ]]]===               ")
     print("----------------Une idee braisnchat----------------")
@@ -91,7 +91,7 @@ def print_header():
     print("")
 
 
-### GRIDS -------------------------
+# -- GRIDS -------------------------
 # we initialize our three grids and fill them with water and nice headers.
 # TRACKING GRID
 tracking_grid = []
@@ -113,7 +113,7 @@ def print_grid(grid):
         print("  ".join(row))
 
 
-### AI BSHIPS ------------------------------
+# -- AI BSHIPS ------------------------------
 # here we set the coordinates of the AI bships
 def random_col(grid):
     return randint(1, len(grid[0]) - 1)
@@ -167,8 +167,10 @@ def print_guess():
     print("PLAYER: %s:%d" % (int_to_char(player_guess_col), player_guess_row))
     print("ENEMY : %s:%d" % (int_to_char(enemy_guess_col), enemy_guess_row))
 
+
 def print_score():
-    print("BIG AI: The score is Player=%d / Enemy=%d" % (player_score,enemy_score))
+    print("BIG AI: The score is Player=%d / Enemy=%d" % (player_score, enemy_score))
+
 
 # Display notifications
 def notif_total_win():
@@ -208,17 +210,17 @@ def print_notifications(msg):
     return result()
 
 
-### MAIN #############################################################################
+# -- MAIN #############################################################################
 # It's now the main thing, greetings to everybody!
 clear()
 print_header()
 
-### PLAYER SHIP -------------------------------
+# -- PLAYER SHIP -------------------------------
 print("--Tracking Grid--")
 print_grid(tracking_grid)
 print("")
 
-###we ask for player ship position
+# -- we ask for player ship position
 print("Where are your %i ship(s)?" % (ships_number))
 
 for i in range(ships_number):
@@ -256,7 +258,7 @@ for i in range(ships_number):
             tracking_grid[player_ship_row][player_ship_col] = 'O'
             break
 
-### MAIN LOOP -------------------------------
+# -- MAIN LOOP -------------------------------
 print_grids_presentation()
 
 for turn in range(turns_number):
@@ -264,8 +266,8 @@ for turn in range(turns_number):
     print("BIG AI: Turn", turn + 1, "on", turns_number)
     print("")
 
-    ###PLAYER GUESS ---------------------------------
-    ###we ask for position to guess to the player
+    # -- PLAYER GUESS ---------------------------------
+    # -- we ask for position to guess to the player
     print("Where do you launch at your missile?")
 
     # COL GUESS
@@ -297,8 +299,8 @@ for turn in range(turns_number):
     player_guess = (player_guess_col, player_guess_row)
     print("player guess =", player_guess)
 
-    ###ENEMY GUESS ---------------------------------
-    #the enemy need to guess coordinates that he never guessed before
+    # -- ENEMY GUESS ---------------------------------
+    # the enemy need to guess coordinates that he never guessed before
     while True:
         try:
             enemy_guess_col = random_col(tracking_grid)
@@ -315,8 +317,8 @@ for turn in range(turns_number):
     print("ENEMY: --- I tried : ", enemy_guess_tried)
 
 
-    ###TURN RESOLUTION ######################################
-    ##PLAYER TURN RESOLUTION ------------
+    # -- TURN RESOLUTION ######################################
+    # -- PLAYER TURN RESOLUTION ------------
     notif_msg_player_turn = 0
     notif_msg_enemy_turn = 0
 
@@ -340,7 +342,7 @@ for turn in range(turns_number):
         primary_grid[player_guess_row][player_guess_col] = "x"
         notif_msg_player_turn = 'player_miss'
 
-    ##ENEMY TURN RESOLUTION ------------
+    # -- ENEMY TURN RESOLUTION ------------
     if enemy_guess in player_ships:
         # enemy success
         tracking_grid[enemy_guess_row][enemy_guess_col] = "Q"
